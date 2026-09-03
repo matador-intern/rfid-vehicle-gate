@@ -1,0 +1,6 @@
+paho-mqtt
+psycopg[binary]
+pymodbus
+python-dotenv
+pytest
+pytest-mock
