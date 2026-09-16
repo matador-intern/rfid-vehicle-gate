@@ -1,0 +1,44 @@
+
+services:
+  # 1. Service Database PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: rfid_db
+    environment:
+      POSTGRES_DB: rfid_vehicle_gate
+      POSTGRES_USER: magang
+      POSTGRES_PASSWORD: rfid_123
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. Service MQTT Broker (Mosquitto)
+  mqtt:
+    image: eclipse-mosquitto:2
+    container_name: rfid_mqtt
+    ports:
+      - "1883:1883"
+
+  # 3. Service Aplikasi Python (Subsystem RFID)
+  app:
+    build: .
+    container_name: rfid_app
+    command: tail -f /dev/null
+    depends_on:
+      - db
+      - mqtt
+    environment:
+      PYTHONPATH: "/app:/app/src"
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: rfid_vehicle_gate
+      DB_USER: magang
+      DB_PASSWORD: rfid_123
+      MQTT_HOST: mqtt
+      MQTT_PORT: 1883
+    volumes:
+      - .:/app
+
+volumes:
+  postgres_data:
