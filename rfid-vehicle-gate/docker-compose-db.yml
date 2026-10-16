@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: rfid_db
+    environment:
+      POSTGRES_DB: rfid_vehicle_gate
+      POSTGRES_USER: magang
+      POSTGRES_PASSWORD: rfid_123
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rfid-net
+
+volumes:
+  postgres_data:
+
+networks:
+  rfid-net:
+    external: true

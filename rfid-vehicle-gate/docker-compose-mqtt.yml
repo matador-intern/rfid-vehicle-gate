@@ -1,0 +1,12 @@
+services:
+  mqtt:
+    image: eclipse-mosquitto:2
+    container_name: rfid_mqtt
+    ports:
+      - "1883:1883"
+    networks:
+      - rfid-net
+
+networks:
+  rfid-net:
+    external: true
